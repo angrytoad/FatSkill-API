@@ -41,6 +41,10 @@ $app->singleton(
     App\Exceptions\Handler::class
 );
 
+$app->register(
+    Irazasyed\JwtAuthGuard\JwtAuthGuardServiceProvider::class
+);
+
 /*
 |--------------------------------------------------------------------------
 | Return The Application
