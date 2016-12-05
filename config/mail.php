@@ -56,6 +56,8 @@ return [
     */
 
     'from' => [
+        'address' => env('MAIL_FROM_ADDRESS', 'no-reply@fatskill.com'),
+        'name' => env('MAIL_FROM_NAME', 'Fat Skill'),
     ],
 
     /*
