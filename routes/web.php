@@ -50,4 +50,8 @@ $this->group(['middleware' => 'auth:web'], function () {
      */
     $this->get('/register', 'Admin\AdminCreationController@showNewAdminForm');
     $this->post('/register', 'Admin\AdminCreationController@createNewAdmin');
+    /*
+    *  Display the admin panel
+    */
+    $this->get('/admin', 'Admin\AdminPanelDisplayController@displayPanel');
 });
