@@ -16,3 +16,12 @@ use Illuminate\Http\Request;
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:api');
+
+$this->group(['middleware' => 'cors'], function () {
+
+	/*
+	*	Api route on /test
+	*/
+	$this->get('/test', 'TestController@test');
+
+});

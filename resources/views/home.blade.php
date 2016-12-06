@@ -9,6 +9,7 @@
 
                 <div class="panel-body">
                     You are logged in!
+                    <a href="/admin">Admin Panel</a>
                 </div>
             </div>
         </div>
