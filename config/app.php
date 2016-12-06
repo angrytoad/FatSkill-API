@@ -181,7 +181,9 @@ return [
         /*
          * Custom Service Providers
          */
-        Irazasyed\JwtAuthGuard\JwtAuthGuardServiceProvider::class
+        Irazasyed\JwtAuthGuard\JwtAuthGuardServiceProvider::class,
+        /* CORS */
+        Barryvdh\Cors\ServiceProvider::class,
 
     ],
 

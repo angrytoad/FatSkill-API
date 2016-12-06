@@ -22,6 +22,6 @@ $this->group(['middleware' => 'cors'], function () {
 	/*
 	*	Api route on /test
 	*/
-	$this->get('/test', 'TestController@test');
+	$this->get('/test', 'Api\TestController@test');
 
 });
