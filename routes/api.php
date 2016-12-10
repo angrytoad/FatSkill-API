@@ -12,16 +12,15 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+$this->group(['middleware' => ['api','cors']], function () {
+	$this->post('/login', 'Api\ApiAuthController@login')->middleware('api');
+});
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:api');
 
-$this->group(['middleware' => 'cors'], function () {
+$this->group(['middleware' => ['auth:api','cors']], function () {
 
 	/*
 	*	Api route on /test
 	*/
-	$this->get('/test', 'Api\TestController@test');
-
+	$this->post('/test', 'Api\TestController@test');
 });
