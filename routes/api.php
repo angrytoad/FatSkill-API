@@ -12,8 +12,11 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+// Requests to /api/
 $this->group(['middleware' => ['api','cors']], function () {
 	$this->post('/login', 'Api\ApiAuthController@login')->middleware('api');
+	$this->post('/register', 'Api\ApiAuthController@register');
 });
 
 
