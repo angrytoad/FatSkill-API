@@ -32,6 +32,12 @@ class ApiAuthController extends Controller {
 
         // Verify the Input data and return errors on failure
         $email = $request->input('email');
+
+        $user = User::find($request->input('email'));
+        if(!is_null($user)){
+            return response()->json(['status' => false, 'message' => 'The email address ['.$request->input('email').'] is already in use.'],400);
+        }
+
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return response()->json(['status' => false, 'message' => 'Email address supplied is invalid.'],400);
         }
