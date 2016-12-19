@@ -33,15 +33,15 @@ class ApiAuthController extends Controller {
         // Verify the Input data and return errors on failure
         $email = $request->input('email');
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            return response()->json(['status' => false, 'message' => 'Email address supplied is invalid.']);
+            return response()->json(['status' => false, 'message' => 'Email address supplied is invalid.'],400);
         }
         $password = $request->input('password');
         if (strlen($password) < 8) {
-            return response()->json(['status' => false, 'message' => 'Password must be 8 characters or longer.']);
+            return response()->json(['status' => false, 'message' => 'Password must be 8 characters or longer.'],400);
         }
         $passwordConfirm = $request->input('passwordConfirm');
         if ($password !== $passwordConfirm) {
-            return response()->json(['status' => false, 'message' => 'Passwords must match.']);
+            return response()->json(['status' => false, 'message' => 'Passwords must match.'], 400);
         }
 
         // Make a url safe token for the user to authenticate with
@@ -67,7 +67,7 @@ class ApiAuthController extends Controller {
 
         // Send authentication email and return success event
         Mail::to($email)->send(new registrationEmail($urlString));
-        return response()->json(['status' => True, 'message' => 'Registration was successful, an activation email has been sent to the supplied email address!']);
+        return response()->json(['status' => True, 'message' => 'Registration was successful, an activation email has been sent to the supplied email address!'], 200);
 
     }
 
