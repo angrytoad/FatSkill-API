@@ -11,6 +11,8 @@ class registrationEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $url;
+
     /**
      * Create a new message instance.
      *
@@ -28,6 +30,7 @@ class registrationEmail extends Mailable
      */
     public function build()
     {
-        return $this->from('noreply@fatskill.com')->view('emails/registration', ['url' => $this->url]);
+        return $this->from('noreply@fatskill.com')
+                    ->view('emails/registration', ['url' => $this->url]);
     }
 }

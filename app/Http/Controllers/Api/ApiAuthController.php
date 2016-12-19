@@ -11,6 +11,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Hash;
 use Mail;
 use App\Mail\registrationEmail;
+use Uuid;
 
 class ApiAuthController extends Controller {
 
@@ -39,30 +40,30 @@ class ApiAuthController extends Controller {
             return response()->json(['status' => false, 'message' => 'Password must be 8 characters or longer.']);
         }
         $passwordConfirm = $request->input('passwordConfirm');
-        if (strlen($passwordConfirm) < 8) {
-            return response()->json(['status' => false, 'message' => 'Password must be 8 characters or longer.']);
-        }
         if ($password !== $passwordConfirm) {
             return response()->json(['status' => false, 'message' => 'Passwords must match.']);
         }
-        // Check for duplicate emails
-        $user = User_verification::where('email', '=', $email)->get();
-        if (!$user->isEmpty()) {
-            return response()->json(['status' => false, 'message' => 'Email already in table.']);
-        }
 
         // Make a url safe token for the user to authenticate with
-        $urlCode = urlEncode(str_random(60));
-        $urlString = 'http://fatskill.com/activate?key=' . $urlCode;
-        $urlString = urlencode($urlString);
+        $urlCode = str_random(60);
+        $urlString = env('CLIENT_HOSTNAME').'/activate/' . $urlCode;
 
-        $user_verification = new User_verification();
-        $user_verification->id = rand(1, 1000000); //Change pls
-        $user_verification->email = $email;
-        $user_verification->token = $urlCode;
-        $user_verification->name = $request->input('name');
-        $user_verification->password = Hash::make($password);
-        $user_verification->save();
+        // Check for duplicate emails
+        $user_v = User_verification::where('email', '=', $email)->first();
+
+        // If no duplicate is found, create a new record, else refresh the token
+        if (is_null($user_v)) {
+            $user_verification = new User_verification();
+            $user_verification->id = Uuid::generate();
+            $user_verification->email = $email;
+            $user_verification->token = $urlCode;
+            $user_verification->name = $request->input('name');
+            $user_verification->password = Hash::make($password);
+            $user_verification->save();
+        }else{
+            $user_v->token = $urlCode;
+            $user_v->save();
+        }
 
         // Send authentication email and return success event
         Mail::to($email)->send(new registrationEmail($urlString));
