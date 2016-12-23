@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 $this->group(['middleware' => ['api','cors']], function () {
 	$this->post('/login', 'Api\ApiAuthController@login')->middleware('api');
 	$this->post('/register', 'Api\ApiAuthController@register');
+	$this->get('/activate/{token}', 'Api\ApiAuthController@activate');
 });
 
 

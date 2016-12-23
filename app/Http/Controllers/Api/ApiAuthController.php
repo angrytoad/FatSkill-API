@@ -77,4 +77,22 @@ class ApiAuthController extends Controller {
 
     }
 
+    public function activate(Request $request, $token) {
+
+        // Is the token in the users verification table
+        $user_t = User_verification::where('token', '=', $token)->first();
+        if (is_null($user_t)) {
+            return response()->json(['status' => false, 'message' => 'Token does not exist.'], 400);
+        }
+        // Is the activation within the valid time period (1 week or 604,800s)
+        if (time() > strtotime($user_t->updated_at) + 604800) {
+            return response()->json(['status' => false, 'message' => 'Token has expired.'], 400);
+        }
+        //
+
+
+        return response()->json(['token' => $token]);
+
+    }
+
 }
