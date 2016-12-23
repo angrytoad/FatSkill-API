@@ -23,8 +23,10 @@ class ApiAuthController extends Controller {
             $user->api_token = str_random(60);
             $user->save();
             return response()->json([
-                'api_token' => $user->api_token
+                'api_token' => 'Bearer '.$user->api_token
             ], 200);
+        }else{
+            return response()->json(['status' => false, 'message' => 'Your email/password is incorrect.'],400);
         }
     }
 

@@ -14,7 +14,11 @@ class AdminPanelDisplayController extends controller {
     public function displayPanel() {
 
         $accountsNo = $this->getTotalUsers();
-        return view('adminPanel', array('users' => $accountsNo));
+        $reg_accountsNo = $this->getRegularUsers();
+        return view('adminPanel', array(
+            'users' => $accountsNo,
+            'reg_users' => $reg_accountsNo
+        ));
 
     }
 
@@ -27,6 +31,10 @@ class AdminPanelDisplayController extends controller {
 
         return User::count('id');
 
+    }
+
+    public function getRegularUsers() {
+        return User::where('admin', false)->count('id');
     }
 
 }

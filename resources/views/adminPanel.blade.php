@@ -22,6 +22,7 @@
                 <div class="panel-heading">Statistics</div>
                 <div class="panel-body">
                     <p>Total number of registered user accounts: {{ $users }}</p>
+                    <p>Number of regular users: {{$reg_users}}</p>
                 </div>
             </div>
         </div>
