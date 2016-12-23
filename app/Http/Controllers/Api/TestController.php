@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 class TestController extends Controller {
 
     public function test() {
-        return response()->json(['Code' => 0001, 'Message' => 'This is a response.']);
+        return response()->json([],200);
     }
 
 }

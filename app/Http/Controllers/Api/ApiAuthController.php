@@ -26,7 +26,7 @@ class ApiAuthController extends Controller {
                 'api_token' => 'Bearer '.$user->api_token
             ], 200);
         }else{
-            return response()->json(['status' => false, 'message' => 'Your email/password is incorrect.'],400);
+            return response()->json(['status' => false, 'message' => 'Your email/password is incorrect.'],403);
         }
     }
 
@@ -79,21 +79,33 @@ class ApiAuthController extends Controller {
 
     }
 
-    public function activate(Request $request, $token) {
+    public function activate(Request $request) {
 
         // Is the token in the users verification table
-        $user_t = User_verification::where('token', '=', $token)->first();
-        if (is_null($user_t)) {
-            return response()->json(['status' => false, 'message' => 'Token does not exist.'], 400);
+        if($request->has('token')) {
+            $token = $request->get('token');
+            $user_t = User_verification::where('token', '=', $token)->first();
+            if (is_null($user_t)) {
+                return response()->json(['status' => false, 'message' => 'Token does not exist.'], 400);
+            }
+            // Is the activation within the valid time period (1 week or 604,800s)
+            if (time() > strtotime($user_t->updated_at) + 604800) {
+                return response()->json(['status' => false, 'message' => 'Token has expired.'], 400);
+            }
+            $user = new User();
+            $user->name = $user_t->name;
+            $user->email = $user_t->email;
+            $user->password = $user_t->password;
+            $user->api_token = str_random(60);
+            $user->admin = false;
+            $user->save();
+            $user_t->delete();
+            return response()->json([
+                'api_token' => 'Bearer '.$user->api_token
+            ], 200);
+        }else{
+            return response()->json(['status' => false, 'message' => 'No activation token was presented.'], 400);
         }
-        // Is the activation within the valid time period (1 week or 604,800s)
-        if (time() > strtotime($user_t->updated_at) + 604800) {
-            return response()->json(['status' => false, 'message' => 'Token has expired.'], 400);
-        }
-        //
-
-
-        return response()->json(['token' => $token]);
 
     }
 

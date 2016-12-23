@@ -14,17 +14,21 @@ use Illuminate\Http\Request;
 */
 
 // Requests to /api/
-$this->group(['middleware' => ['api','cors']], function () {
+$this->group(['middleware' => ['api']], function () {
 	$this->post('/login', 'Api\ApiAuthController@login')->middleware('api');
 	$this->post('/register', 'Api\ApiAuthController@register');
-	$this->get('/activate/{token}', 'Api\ApiAuthController@activate');
+	$this->post('/register/activate', 'Api\ApiAuthController@activate');
 });
 
 
-$this->group(['middleware' => ['auth:api','cors']], function () {
+$this->group(['middleware' => ['auth:api']], function () {
 
 	/*
 	*	Api route on /test
 	*/
-	$this->post('/test', 'Api\TestController@test');
+	$this->any('/test', 'Api\TestController@test');
+
+	$this->group(['prefix' => '/user'], function () {
+		$this->get('me', 'Api\UserController@me');
+	});
 });
