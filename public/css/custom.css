@@ -1,0 +1,41 @@
+
+#question_type_list{
+    padding:0px;
+}
+
+#question_type_list li{
+    padding:8px 0px;
+    list-style-type: none;
+    background: #EAEAEA;
+    border-radius: 4px;
+    border: 1px solid #d3e0e9;
+    display:table;
+    width:100%;
+    margin-bottom:5px;
+}
+
+#question_type_list li > div{
+    display:table-cell;
+    width:50%;
+    vertical-align: middle;
+    padding:5px 10px;
+}
+
+#question_type_list li p, #question_type_list li h4{
+    margin:0px;
+}
+
+#question_type_list li i{
+    font-size:2rem;
+    margin-top:5px;
+}
+
+#question_type_list li i:hover{
+    opacity:0.7;
+    cursor:pointer;
+}
+
+#recently_create_tests_list, #recently_created_revisions_list{
+    padding:0px;
+}
+

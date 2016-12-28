@@ -12,6 +12,9 @@
                     <a href="/register">
                         <button class="btn btn-info">Register A New Admin Account</button>
                     </a>
+                    <a href="/admin/tests">
+                        <button class="btn btn-info">Test Manager</button>
+                    </a>
                 </div>
             </div>
         </div>

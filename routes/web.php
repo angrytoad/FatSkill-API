@@ -50,8 +50,21 @@ $this->group(['middleware' => 'auth:web'], function () {
      */
     $this->get('/register', 'Admin\AdminCreationController@showNewAdminForm');
     $this->post('/register', 'Admin\AdminCreationController@createNewAdmin');
+
     /*
-    *  Display the admin panel
-    */
-    $this->get('/admin', 'Admin\AdminPanelDisplayController@displayPanel');
+     *  Display the admin panel
+     */
+    $this->group(['prefix' => 'admin'], function () {
+        $this->get('/', 'Admin\AdminPanelDisplayController@displayPanel');
+
+        /*
+         * Test Management Routes
+         */
+        $this->get('/tests', 'Admin\TestController@index');
+        $this->get('/tests/question_types', 'Admin\QuestionTypeController@index');
+        $this->get('/tests/create', 'Admin\TestController@creation_page');
+        $this->post('/tests/question_types/create', 'Admin\QuestionTypeController@store');
+        $this->get('/tests/question_types/{uuid}/delete', 'Admin\QuestionTypeController@delete');
+    });
+    
 });
