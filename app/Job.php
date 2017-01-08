@@ -17,7 +17,7 @@ class Job extends Eloquent {
     
     public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsToMany('App\User');
     }
 
     public function candidates()

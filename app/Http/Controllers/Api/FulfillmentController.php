@@ -54,4 +54,29 @@ class FulfillmentController extends Controller {
         return response()->json([],200);
     }
 
+    public function getJob($job_id) {
+        $job = Job::find($job_id);
+        if($job->user->first()->id === Auth::user()->id){
+            $job_candidates = $job->candidates->all();
+
+            $candidates = [];
+            foreach($job_candidates as $candidate){
+
+            };
+
+
+            return response()->json([
+                "id" => $job->id,
+                "position" => $job->position,
+                "sector" => $job->sector,
+                "company" => $job->company,
+                "location" => $job->location,
+                "expiry" => $job->expiry,
+                "candidate_count" => count($candidates),
+                "candidates" => $candidates
+            ],200);
+        }
+        return response()->json('Unauthenticated',403);
+    }
+
 }
