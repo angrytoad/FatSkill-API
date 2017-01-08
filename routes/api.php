@@ -31,4 +31,10 @@ $this->group(['middleware' => ['auth:api']], function () {
 	$this->group(['prefix' => '/user'], function () {
 		$this->get('me', 'Api\UserController@me');
 	});
+
+	$this->group(['prefix' => '/fulfillment'], function () {
+		$this->get('latest', 'Api\FulfillmentController@latest');
+		$this->get('recent', 'Api\FulfillmentController@recent');
+		$this->post('create', 'Api\FulfillmentController@create');
+	});
 });
