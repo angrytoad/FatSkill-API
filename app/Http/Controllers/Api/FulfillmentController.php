@@ -12,7 +12,7 @@ use Uuid;
 class FulfillmentController extends Controller {
 
     public function latest() {
-        $jobs = Auth::user()->jobs()->orderBy('position','ASC')->get();
+        $jobs = Auth::user()->jobs()->where('expiry', '>', Carbon::now())->orderBy('position','ASC')->get();
         return response()->json($jobs,200);
     }
 
@@ -59,9 +59,21 @@ class FulfillmentController extends Controller {
         if($job->user->first()->id === Auth::user()->id){
             $job_candidates = $job->candidates->all();
 
+            $overall_score = 0;
+
+            $completion_count = 0;
             $candidates = [];
             foreach($job_candidates as $candidate){
-
+                $candidates[] = [
+                    "email" => $candidate->email,
+                    "name" => 'Thomas Freeborough',
+                    "added" => Carbon::now(),
+                    "completed" => true,
+                    "score" => "87%"
+                ];
+                if($candidate->results->completed){
+                    $completion_count++;
+                }
             };
 
 
@@ -73,6 +85,8 @@ class FulfillmentController extends Controller {
                 "location" => $job->location,
                 "expiry" => $job->expiry,
                 "candidate_count" => count($candidates),
+                "candidates_completed" => $completion_count,
+                "overall_score" => $overall_score,
                 "candidates" => $candidates
             ],200);
         }

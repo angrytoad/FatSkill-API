@@ -31,4 +31,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('App\Job')->withTimestamps();
     }
+    
+    public function candidates()
+    {
+        return $this->hasMany('App\Candidate');
+    }
 }

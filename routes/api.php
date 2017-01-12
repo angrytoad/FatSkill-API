@@ -41,4 +41,8 @@ $this->group(['middleware' => ['auth:api']], function () {
 			$this->get('{job}', 'Api\FulfillmentController@getJob');
 		});
 	});
+
+	$this->group(['prefix' => '/candidate'], function () {
+		$this->get('basic', 'Api\CandidateController@basicCandidateList');
+	});
 });

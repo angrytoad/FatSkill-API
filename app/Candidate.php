@@ -15,6 +15,11 @@ class Candidate extends Eloquent {
         return $this->belongsToMany('App\Job')->withTimestamps();
     }
 
+    public function user()
+    {
+        return $this->hasOne('App\User');
+    }
+
 }
 
 ?>
