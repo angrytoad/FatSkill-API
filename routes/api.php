@@ -39,6 +39,8 @@ $this->group(['middleware' => ['auth:api']], function () {
 		
 		$this->group(['prefix' => 'position'], function () {
 			$this->get('{job}', 'Api\FulfillmentController@getJob');
+			$this->post('{job}/link', 'Api\FulfillmentController@addCandidate');
+			$this->post('{job}/create-link', 'Api\FulfillmentController@createAndAddCandidate');
 		});
 	});
 

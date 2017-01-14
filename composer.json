@@ -10,7 +10,8 @@
         "tymon/jwt-auth": "^1.0@dev",
         "irazasyed/jwt-auth-guard": "^1.0",
         "barryvdh/laravel-cors": "^0.8.2",
-        "webpatser/laravel-uuid": "2.*"
+        "webpatser/laravel-uuid": "2.*",
+        "doctrine/dbal": "^2.5"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

@@ -36,4 +36,9 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Candidate');
     }
+
+    public function hasCandidate($candidate_email)
+    {
+        return ($this->candidates()->where('id',$candidate_email)->first() !== null ? true : false);
+    }
 }

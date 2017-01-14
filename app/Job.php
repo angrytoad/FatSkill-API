@@ -22,7 +22,7 @@ class Job extends Eloquent {
 
     public function candidates()
     {
-        return $this->belongsToMany('App\Candidate');
+        return $this->belongsToMany('App\Candidate')->withPivot('created_at');
     }
 
 }

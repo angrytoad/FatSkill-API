@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Candidate;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -11,11 +12,21 @@ use Uuid;
 
 class FulfillmentController extends Controller {
 
+    /**
+     * Get all non-expired jobs that the user currently has
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function latest() {
         $jobs = Auth::user()->jobs()->where('expiry', '>', Carbon::now())->orderBy('position','ASC')->get();
         return response()->json($jobs,200);
     }
 
+    /**
+     * Get the 10 most recently added jobs by a user
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function recent() {
         $jobs = Auth::user()->jobs()->orderBy('created_at','DESC')->limit(10)->get();
         $jobs_array = array();
@@ -30,7 +41,13 @@ class FulfillmentController extends Controller {
 
         return response()->json($jobs_array, 200);
     }
-    
+
+    /**
+     * Create a new position
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function create(Request $request) {
         $this->validate($request, [
             'position' => 'required|max:255',
@@ -54,28 +71,38 @@ class FulfillmentController extends Controller {
         return response()->json([],200);
     }
 
+    /**
+     * Get information about a position
+     *
+     * @param $job_id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getJob($job_id) {
         $job = Job::find($job_id);
         if($job->user->first()->id === Auth::user()->id){
-            $job_candidates = $job->candidates->all();
+            $job_candidates = $job->candidates()->orderBy('email','ASC')->get();
 
             $overall_score = 0;
 
             $completion_count = 0;
             $candidates = [];
-            foreach($job_candidates as $candidate){
+            foreach($job_candidates as $key => $candidate){
                 $candidates[] = [
                     "email" => $candidate->email,
                     "name" => 'Thomas Freeborough',
-                    "added" => Carbon::now(),
+                    "added" => Carbon::parse($candidate->pivot->created_at),
                     "completed" => true,
-                    "score" => "87%"
+                    "score" => 87-$key
                 ];
+                if(true){
+                    $completion_count++;
+                }
+                /*
                 if($candidate->results->completed){
                     $completion_count++;
                 }
+                */
             };
-
 
             return response()->json([
                 "id" => $job->id,
@@ -89,6 +116,62 @@ class FulfillmentController extends Controller {
                 "overall_score" => $overall_score,
                 "candidates" => $candidates
             ],200);
+        }
+        return response()->json('Unauthenticated',403);
+    }
+
+
+    /**
+     * Link a candidate to the position
+     *
+     * @param Request $request
+     * @param $job_id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function addCandidate(Request $request, $job_id) {
+        $job = Job::find($job_id);
+        if($job->user->first()->id === Auth::user()->id){
+            $candidate = Candidate::find($request->get('candidate_id'));
+            if(!is_null($candidate)){
+                if(!$candidate->ownedBy(Auth::user()->id)){
+                    $candidate->jobs->attach($job_id);
+                }
+                return response()->json('This candidate is already part of this position',422);
+            }
+        }
+        return response()->json('Unauthenticated',403);
+    }
+
+    /**
+     * Create a new candidate and then link them to the position given
+     *
+     * @param Request $request
+     * @param $job_id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function createAndAddCandidate(Request $request, $job_id){
+        $job = Job::find($job_id);
+        if($job->user->first()->id === Auth::user()->id){
+            $this->validate($request, [
+                'candidate_email' => 'required|email|max:255',
+            ]);
+            if(!Auth::user()->hasCandidate($request->get('candidate_email'))){
+                $candidate = new Candidate();
+                $candidate->id = Uuid::generate();
+                $candidate->email = $request->get('candidate_email');
+                $candidate->user_id = Auth::user()->id;
+                $candidate->save();
+
+                $candidate->jobs()->attach($job_id);
+                return response()->json([],200);
+            }else{
+                $candidate = Auth::user()->candidates()->where('email',$request->get('candidate_email'));
+                if(!$candidate->ownedBy(Auth::user()->id)){
+                    $candidate->jobs()->attach($job_id);
+                    return response()->json([],200);
+                }
+                return response()->json('This candidate is already part of this position',422);
+            }
         }
         return response()->json('Unauthenticated',403);
     }
