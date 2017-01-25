@@ -12,7 +12,12 @@ class Test extends Eloquent {
     
     public function revisions()
     {
-        return $this->belongsToMany('App\Revision');
+        return $this->hasMany('App\Revision');
+    }
+
+    public function user()
+    {
+        return $this->hasOne('App\User');
     }
 
 }

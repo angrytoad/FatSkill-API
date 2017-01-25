@@ -47,4 +47,9 @@ $this->group(['middleware' => ['auth:api']], function () {
 	$this->group(['prefix' => '/candidate'], function () {
 		$this->get('basic', 'Api\CandidateController@basicCandidateList');
 	});
+
+	$this->group(['prefix' => '/tests'], function () {
+		$this->get('/', 'Api\TestController@listTests');
+		$this->post('create', 'Api\TestController@create');
+	});
 });
