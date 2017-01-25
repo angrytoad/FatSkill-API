@@ -28,14 +28,16 @@ class TestController extends Controller {
             'description' => 'required',
             'public' => 'required',
         ]);
-
+        $uuid = Uuid::generate();
         $test = new Test();
-        $test->id = Uuid::generate();
+        $test->id = $uuid;
         $test->name = $request->get('name');
         $test->description = $request->get('description');
         $test->user_id = Auth::user()->id;
         $test->save();
-        return response()->json(200);
+        return response()->json([
+          "uuid" => $uuid
+        ],200);
     }
 
 }
