@@ -20,6 +20,11 @@ class Test extends Eloquent {
         return $this->hasOne('App\User');
     }
 
+    public function jobs()
+    {
+        return $this->hasMany('App\Job');
+    }
+
 }
 
 ?>

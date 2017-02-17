@@ -8,12 +8,6 @@ class Job extends Eloquent {
 
     protected $table = 'jobs';
     public $incrementing = false;
-
-
-    public function revision()
-    {
-        return $this->hasOne('App\Revision');
-    }
     
     public function user()
     {
@@ -23,6 +17,11 @@ class Job extends Eloquent {
     public function candidates()
     {
         return $this->belongsToMany('App\Candidate')->withPivot('created_at');
+    }
+
+    public function test()
+    {
+        return $this->hasOne('App\Test');
     }
 
 }

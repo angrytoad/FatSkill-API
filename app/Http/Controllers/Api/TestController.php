@@ -17,7 +17,8 @@ class TestController extends Controller {
 
     public function listTests()
     {
-        $tests = Auth::user()->tests()->get();
+        $tests = Auth::user()->tests()->with('revisions')->get();
+
         return response()->json($tests,200);
     }
     
@@ -36,8 +37,18 @@ class TestController extends Controller {
         $test->user_id = Auth::user()->id;
         $test->save();
         return response()->json([
-          "uuid" => $uuid
+          "uuid" => $uuid->string
         ],200);
+    }
+
+    public function view($uuid)
+    {
+        $test = Test::find($uuid);
+        $revisions = $test->revisions;
+        return response()->json([
+            "test" => $test,
+            "revisions" => $revisions
+        ]);
     }
 
 }

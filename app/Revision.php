@@ -11,7 +11,7 @@ class Revision extends Eloquent {
 
     public function test()
     {
-        return $this->hasOne('App\Revision');
+        return $this->hasOne('App\Test');
     }
 
 }
