@@ -37,5 +37,6 @@
 
 #recently_create_tests_list, #recently_created_revisions_list{
     padding:0px;
+    list-style-type: none;
 }
 

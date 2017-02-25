@@ -34,7 +34,7 @@
                     <div class="panel-body">
                         <ul id="recently_create_tests_list">
                             @foreach($recent_tests as $recent_test)
-                                <li>{{ $recent_test->name }}</li>
+                                <li>{{ $recent_test->name }} - {{ \Carbon\Carbon::parse($recent_test->created_at)->format('d/m/Y') }}</li>
                             @endforeach
                             @if(count($recent_tests) === 0)
                                 <p>There have been no recently created tests</p>
@@ -55,7 +55,7 @@
                     <div class="panel-body">
                         <ul id="recently_created_revisions_list">
                             @foreach($recent_revisions as $recent_revision)
-                                <li>{{ $recent_revisions->title }}</li>
+                                <li>{{ $recent_revision->title }}</li>
                             @endforeach
                             @if(count($recent_revisions) === 0)
                                 <p>There have been no recently created revisions</p>

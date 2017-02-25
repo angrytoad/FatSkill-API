@@ -52,5 +52,7 @@ $this->group(['middleware' => ['auth:api']], function () {
 		$this->get('/', 'Api\TestController@listTests');
 		$this->post('create', 'Api\TestController@create');
 		$this->get('view/{uuid}', 'Api\TestController@view');
+		
+		$this->post('{uuid}/revisions/create', 'Api\RevisionController@create');
 	});
 });
