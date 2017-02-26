@@ -34,6 +34,7 @@ class TestController extends Controller {
         $test->id = $uuid;
         $test->name = $request->get('name');
         $test->description = $request->get('description');
+        $test->public = $request->get('public');
         $test->user_id = Auth::user()->id;
         $test->save();
         return response()->json([
